@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
+import './App.css';
 
 // Initialize socket connection outside the component to avoid multiple connections.
 // We set autoConnect: false to have manual control over when to connect.
@@ -40,26 +41,46 @@ const App = () => {
   };
 
   return (
-    <div>
-      <h1>Wechat App</h1>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md bg-white shadow-lg rounded-lg overflow-hidden">
+        {/* Header */}
+        <div className="bg-blue-500 text-white text-center py-3 text-lg font-semibold">
+          WeChat App
+        </div>
 
-      {/* Input field for typing messages */}
-      <input
-        type="text"
-        value={messageInput}
-        placeholder="Type your message..."
-        onChange={(e) => setMessageInput(e.target.value)}
-      />
+        {/* Chat Messages */}
+        <div className="p-4 h-80 overflow-y-auto flex flex-col space-y-2">
+          {messages.map((message, index) => (
+            <div
+              key={index}
+              className={`px-4 py-2 rounded-lg max-w-xs ${
+                index % 2 === 0
+                  ? 'bg-gray-200 self-start'
+                  : 'bg-blue-400 text-white self-end'
+              }`}
+            >
+              {message}
+            </div>
+          ))}
+        </div>
 
-      {/* Button to send the message. "Send" is visible to indicate its purpose. */}
-      <button onClick={sendMessage}>Send</button>
-
-      {/* Section to render all the received messages */}
-      <section>
-        {messages.map((message, index) => (
-          <div key={index}>{message}</div>
-        ))}
-      </section>
+        {/* Input Box */}
+        <div className="flex items-center border-t border-gray-300 p-3">
+          <input
+            type="text"
+            className="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+            value={messageInput}
+            placeholder="Type your message..."
+            onChange={(e) => setMessageInput(e.target.value)}
+          />
+          <button
+            onClick={sendMessage}
+            className="ml-3 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+          >
+            Send
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
